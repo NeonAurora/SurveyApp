@@ -15,7 +15,7 @@ export default function IncomeHistoryPage() {
                 elements: [
                     {
                         type: "radiogroup",
-                        name: "open-credit",
+                        name: "open_credit",
                         title: "Do you have any open credit lines on your credit report? (Car payment, credit card etc.)",
                         isRequired: true,
                         colCount: 1,

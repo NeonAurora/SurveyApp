@@ -1,27 +1,20 @@
 'use client';
 
-import { Survey, Model } from "survey-react-ui";
 import { useRouter } from "next/navigation";
-import { useSurvey } from "@/app/context/SurveyContext";
-import { useEffect, useState } from "react";
-export default function QualifyPage({ pqualify }) {
-    const router = useRouter();
+import { useState, useEffect } from "react";
+
+export default function DisqualificationPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate a loading period of 3 seconds
+        // Set a timeout to simulate evaluation time (3 seconds)
         const timer = setTimeout(() => {
             setLoading(false);
-
-            if (pqualify) {
-                // Redirect to the survey finish page if the user qualifies
-                router.push("/survey/survey-finish");
-            }
         }, 3000);
 
-        // Cleanup the timer on component unmount
+        // Cleanup the timer if the component unmounts before timeout
         return () => clearTimeout(timer);
-    }, [pqualify, router]);
+    }, []);
 
     return (
         <div style={{ textAlign: "center", marginTop: "20vh" }}>
@@ -29,14 +22,12 @@ export default function QualifyPage({ pqualify }) {
                 <div>
                     <h2>Evaluating your application...</h2>
                     {/* Loading spinner */}
-                    <div className="spinner" style={spinnerStyle}></div>
+                    <div style={spinnerStyle}></div>
                 </div>
             ) : (
-                !pqualify && (
-                    <div>
-                        <h2>Sorry, you do not qualify for our seller finance program.</h2>
-                    </div>
-                )
+                <div>
+                    <h2>Sorry, you do not qualify for our seller finance program.</h2>
+                </div>
             )}
         </div>
     );
@@ -54,14 +45,14 @@ const spinnerStyle = {
 
 // Add CSS keyframes for spinner animation
 const spinnerCSS = `
+<style>
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}`;
+}
+</style>
+`;
 
-// Inject CSS styles for spinner into the page head
 if (typeof window !== "undefined") {
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = spinnerCSS;
-    document.head.appendChild(styleTag);
+    document.head.innerHTML += spinnerCSS;
 }
