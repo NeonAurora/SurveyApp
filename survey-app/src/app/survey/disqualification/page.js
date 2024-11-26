@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import styles from "./DisqualificationPage.module.css"; // Import CSS module
 
 export default function DisqualificationPage() {
     const [loading, setLoading] = useState(true);
@@ -22,7 +23,7 @@ export default function DisqualificationPage() {
                 <div>
                     <h2>Evaluating your application...</h2>
                     {/* Loading spinner */}
-                    <div style={spinnerStyle}></div>
+                    <div className={styles.spinner}></div>
                 </div>
             ) : (
                 <div>
@@ -31,28 +32,4 @@ export default function DisqualificationPage() {
             )}
         </div>
     );
-}
-
-// Inline style for loading spinner
-const spinnerStyle = {
-    width: "40px",
-    height: "40px",
-    border: "5px solid #f3f3f3",
-    borderTop: "5px solid #3498db",
-    borderRadius: "50%",
-    animation: "spin 1s linear infinite",
-};
-
-// Add CSS keyframes for spinner animation
-const spinnerCSS = `
-<style>
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
-`;
-
-if (typeof window !== "undefined") {
-    document.head.innerHTML += spinnerCSS;
 }
