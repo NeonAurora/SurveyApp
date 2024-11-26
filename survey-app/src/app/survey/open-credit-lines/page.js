@@ -34,6 +34,7 @@ export default function IncomeHistoryPage() {
     survey.onComplete.add((sender) => {
         const results = sender.data;
         updateSurveyData("open_credit", results.open_credit);
+
         console.log("Credit Lines : ", results.open_credit);
 
         if (results.open_credit === "Yes, I do") {
