@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function DeclaredBankruptcyPage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Declared Bankruptcy",
@@ -34,13 +34,17 @@ export default function DeclaredBankruptcyPage() {
     survey.onComplete.add((sender) => {
         const results = sender.data;
         updateSurveyData("declared_bankruptcy", results.declared_bankruptcy);
-        console.log("Declared Bankruptcy Status: ", results.declared_bankruptcy);
 
-        // if (results.declared_bankruptcy === "Yes") {
-            router.push("/survey/current-credit-score"); // Placeholder path for users who declared bankruptcy
-        // } else {
-        //     router.push("/survey/current-credit-score"); // Redirect to the current credit score page
-        // }
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+
+        if(results.declared_bankruptcy === "Yes") {
+            disqualificationFlag = true;
+        }
+
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
+
+        console.log("Declared Bankruptcy Status: ", results.declared_bankruptcy);
+        router.push("/survey/current-credit-score");
     });
 
     return (

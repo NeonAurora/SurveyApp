@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function IncomeHistoryPage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Income History Documentation",
@@ -33,8 +33,14 @@ export default function IncomeHistoryPage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
-        updateSurveyData("income_history", results.income_history);
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+
+        if(results.income_history === "I am unable to at the moment"){
+            disqualificationFlag = true;
+        }
         console.log("Income History Documentation: ", results.income_history);
+        updateSurveyData("income_history", results.income_history);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
 
         if (results.income_history === "Yes, of course") {
             router.push("/survey/open-credit-lines"); // Replace with the actual next page path

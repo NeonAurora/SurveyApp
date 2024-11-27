@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function GrossAnnualIncomePage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Household Gross Annual Income",
@@ -38,7 +38,14 @@ export default function GrossAnnualIncomePage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+        if(results.gross_annual_income == "$30,000 - $50,000" || results.gross_annual_income == "Less than $30,000"){
+            disqualificationFlag = true;
+        }
+
+
         updateSurveyData("gross_annual_income", results.gross_annual_income);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
         console.log("Gross Annual Income: ", results.gross_annual_income);
 
         router.push("/survey/foreclosure-forbearance"); // Replace with the actual next page path

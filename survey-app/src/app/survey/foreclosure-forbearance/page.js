@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function ForeclosureForbearancePage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Foreclosure or Forbearance Status",
@@ -33,14 +33,16 @@ export default function ForeclosureForbearancePage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
-        updateSurveyData("foreclosure_forbearance", results.foreclosure_forbearance);
-        console.log("Foreclosure or Forbearance Status: ", results.foreclosure_forbearance);
 
-        // if (results.foreclosure_forbearance === "Yes") {
-            router.push("/survey/declared-bankruptcy"); // Placeholder path for users in foreclosure or forbearance
-        // } else {
-        //     router.push("/survey/next-step-no-foreclosure"); // Placeholder path for users not in foreclosure or forbearance
-        // }
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+        if(results.foreclosure_forbearance == "Yes") {
+            disqualificationFlag = true;
+        }
+        
+        updateSurveyData("foreclosure_forbearance", results.foreclosure_forbearance);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
+        console.log("Foreclosure or Forbearance Status: ", results.foreclosure_forbearance);
+        router.push("/survey/declared-bankruptcy");
     });
 
     return (

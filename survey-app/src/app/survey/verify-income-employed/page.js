@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function VerifyIncomeEmployedPage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Income Verification for Employed",
@@ -33,7 +33,12 @@ export default function VerifyIncomeEmployedPage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+        if(results.verify_income_employed == "I am unable to at the moment") {
+            disqualificationFlag = true;
+        }
         updateSurveyData("verify_income_employed", results.verify_income_employed);
+        updateSurveyData("disqualificationFlag", disqualificationFlag );
         console.log("Income Verification for Employed: ", results.verify_income_employed);
 
         if (results.verify_income_employed === "Yes, of course") {

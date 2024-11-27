@@ -43,7 +43,7 @@ export default function CurrentCreditScorePage() {
         let disqualificationFlag = surveyData.disqualificationFlag || false;
 
         // Update the disqualification flag based on the user's answer
-        if (results.current_credit_score === "Poor (580-619)" || results.current_credit_score === "Bad (Below 580)") {
+        if (results.current_credit_score === "Poor (580-619)" || results.current_credit_score === "Bad (Below 580)" || results.current_credit_score === "Below average (620-659)") {
             disqualificationFlag = true; // Set flag to true if the credit score is poor or bad
         }
 

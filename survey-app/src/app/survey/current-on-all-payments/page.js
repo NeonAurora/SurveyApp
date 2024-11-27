@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function CurrentOnAllPaymentsPage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         tile: "Current On All Payments",
@@ -34,7 +34,13 @@ export default function CurrentOnAllPaymentsPage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
+        const disqualificationFlag = surveyData.disqualificationFlag || false;
+
+        if(results.current_on_all_payments === "No") {
+            disqualificationFlag = true;
+        }
         updateSurveyData("current_on_all_payments", results.current_on_all_payments);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
         console.log("Current on all payments: ", results.current_on_all_payments);
 
         router.push("/survey/down-payment");

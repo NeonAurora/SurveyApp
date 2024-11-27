@@ -6,7 +6,7 @@ import { useSurvey } from "@/app/context/SurveyContext";
 
 export default function VerifyIncomeRetiredPage() {
     const router = useRouter();
-    const { updateSurveyData } = useSurvey();
+    const { updateSurveyData, surveyData } = useSurvey();
 
     const surveyJson = {
         title: "Income Verification for Retired",
@@ -33,7 +33,13 @@ export default function VerifyIncomeRetiredPage() {
 
     survey.onComplete.add((sender) => {
         const results = sender.data;
+        const disqualificationFlag = surveyData.disqualificationFlag;
+        if(results.verify_income_retired === "I am unable to at the moment") {
+            disqualificationFlag = true;
+        }
+    
         updateSurveyData("verify_income_retired", results.verify_income_retired);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
         console.log("Income Verification for Retired: ", results.verify_income_retired);
 
         if (results.verify_income_retired === "Yes, of course") {

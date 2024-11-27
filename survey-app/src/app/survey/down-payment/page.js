@@ -66,9 +66,27 @@ export default function DownPaymentPage() {
     const survey = new Model(surveyJson);
     survey.onComplete.add((sender) => {
         const results = sender.data;
-        updateSurveyData("down_payment", results.down_payment);
-        console.log("Down payment calculation is: ", results.down_payment);
+        const downPaymentSelection = results.down_payment;
 
+        // Extract percentage value using regular expression
+        const match = downPaymentSelection.match(/^(\d+)%/);
+        let disqualificationFlag = surveyData.disqualificationFlag || false;
+
+        if (match) {
+            const percentage = parseInt(match[1], 10);
+            if (percentage === 10) {
+                disqualificationFlag = true;
+            }
+        }
+
+        // Update the survey data with down payment and disqualification flag
+        updateSurveyData("down_payment", downPaymentSelection);
+        updateSurveyData("disqualificationFlag", disqualificationFlag);
+
+        console.log("Down payment calculation is: ", downPaymentSelection);
+        console.log("Disqualification Flag: ", disqualificationFlag);
+
+        // Navigate to the next page
         router.push("/survey/employment-status");
     });
 
